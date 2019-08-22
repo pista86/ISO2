@@ -1,0 +1,40 @@
+#!/bin/sh
+
+
+DIR=/root
+DAEMON=$DIR/iso2pistaRun
+DAEMON_NAME=iso2pista
+
+do_start () {
+    printf "Starting $DAEMON_NAME daemon"
+    start-stop-daemon -S -q -x $DAEMON -- -g
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+}
+do_stop () {
+    printf "Stopping $DAEMON_NAME daemon"
+    start-stop-daemon -K -q -n $DAEMON_NAME
+    [ $? = 0 ] && echo "OK" || echo "FAIL"
+}
+
+case "$1" in
+
+    start|stop)
+        do_${1}
+        ;;
+
+    restart|reload|force-reload)
+        do_stop
+        do_start
+        ;;
+
+    status)
+        status_of_proc "$DAEMON_NAME" "$DAEMON" && exit 0 || exit $?
+        ;;
+
+    *)
+        echo "Usage: /etc/init.d/$DAEMON_NAME {start|stop|restart|status}"
+        exit 1
+        ;;
+
+esac
+exit 0

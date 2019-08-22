@@ -1,0 +1,4 @@
+loadzimage=fatload mmc 0:1 0x82000000 boot/zImage
+loadfdt=fatload mmc 0:1 0x88000000 boot/am335x-customboneblack.dtb
+my_bootargs=setenv bootargs console=ttyO0,115200n8 root=/dev/mmcblk0p2
+uenvcmd=run loadzimage; run loadfdt; run my_bootargs; bootz 0x82000000 - 0x88000000
